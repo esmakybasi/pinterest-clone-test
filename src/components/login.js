@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Header from './header';
 import axios from 'axios';
 import validator from 'validator';
 
@@ -71,8 +72,11 @@ const LoginPage = () => {
   };
 
   return (
+    <div >
+    <Header/>
+   
     <form style={formStyles} onSubmit={handleSubmit}>
-      <img src="img/pinterest.png" alt="Pinterest Logo" style={logoStyles} />
+      <img src="/img/Pinterest-logo.png" alt="Pinterest Logo" style={logoStyles} />
       <input
         type="email"
         placeholder="E-posta"
@@ -91,6 +95,7 @@ const LoginPage = () => {
         Giriş Yap
       </button>
     </form>
+    </div>
   );
 };
 
