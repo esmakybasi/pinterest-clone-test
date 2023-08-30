@@ -72,7 +72,7 @@ const LoginPage = () => {
 
   return (
     <form style={formStyles} onSubmit={handleSubmit}>
-      <img src="/img/Pinterest-logo.png" alt="Pinterest Logo" style={logoStyles} />
+      <img src="img/pinterest.png" alt="Pinterest Logo" style={logoStyles} />
       <input
         type="email"
         placeholder="E-posta"
