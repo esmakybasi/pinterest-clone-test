@@ -2,11 +2,15 @@ import React, { useState } from 'react';
 import Header from './header';
 import axios from 'axios';
 import validator from 'validator';
+import { useNavigate } from 'react-router-dom';
 
 const LoginPage = () => {
   const apiURL = process.env.REACT_APP_API_URL;
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const navigate = useNavigate();
+  
 
   const logoStyles = {
     width: '50px',
@@ -59,15 +63,17 @@ const LoginPage = () => {
 
     // Giriş işlemini gerçekleştir
     axios
-      .post(`${apiURL}/login`, { email, password })
+      .post(`${apiURL}/login`, { "username":email, "password":password})
       .then((response) => {
+        console.log(response)
         // Giriş başarılı ise localStorage'e isLoggedIn anahtarını true olarak kaydedin
         alert("giriş başarılı")
         localStorage.setItem('isLoggedIn', true);
+        navigate('/userprofile');
         
       })
       .catch((error) => {
-        
+        console.log(error)
         alert('Giriş yaparken bir hata oluştu');
         console.log('Giriş yaparken bir hata oluştu:', error);
       });

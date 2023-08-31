@@ -109,10 +109,16 @@ const UserProfile = () => {
     
     if (selectedFile) {
       const formData = new FormData();
-        formData.append('file', selectedFile);
+        formData.append('profileImage', selectedFile);
   
-        const response = await axios.post('http://localhost:3000', formData);
-        console.log("response", response);
+     axios.post('http://localhost:3050/upload', formData).then((result) => {
+
+     console.log("result", result)
+
+     }).catch((error)=>{
+      console.error("fileUpload Error", error)
+     })
+        
         
     }
   };
