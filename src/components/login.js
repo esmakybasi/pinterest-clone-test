@@ -62,10 +62,12 @@ const LoginPage = () => {
       .post(`${apiURL}/login`, { email, password })
       .then((response) => {
         // Giriş başarılı ise localStorage'e isLoggedIn anahtarını true olarak kaydedin
+        alert("giriş başarılı")
         localStorage.setItem('isLoggedIn', true);
         
       })
       .catch((error) => {
+        
         alert('Giriş yaparken bir hata oluştu');
         console.log('Giriş yaparken bir hata oluştu:', error);
       });

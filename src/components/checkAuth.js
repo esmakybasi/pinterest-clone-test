@@ -7,10 +7,10 @@ const CheckAuth = () => {
   useEffect(() => {
     // isLoggedIn anahtarını localStorage'den alın
     const isLoggedIn = localStorage.getItem('isLoggedIn');
-
+    
     if (!isLoggedIn) {
       // login sayfasına yönlendir
-      navigate("/login")
+      navigate('/login');
     }
   }, []);
 
