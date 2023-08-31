@@ -12,7 +12,7 @@ const CheckAuth = () => {
       // login sayfasına yönlendir
       navigate('/login');
     }
-  }, []);
+  }, );
 
   return null;
 };

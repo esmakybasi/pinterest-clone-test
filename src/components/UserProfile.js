@@ -69,27 +69,26 @@ const EditableFolderName = styled.input`
 `;
 
 const UserProfile = () => {
+  const apiURL = process.env.REACT_APP_API_URL;
   const [editedFolderName, setEditedFolderName] = useState('');
   const [isEditingFolderName, setIsEditingFolderName] = useState(false);
   const fileInputRef = useRef(null);
   const [imgSrc, setImgSrc] = useState("");
 
 
-  const [user, setUser] = useState({
-  username: 'esmakoybasi',
-  bio: 'Biyografi...',
-  avatar: '/img/pp.jpg',
-  pins: [
-    { id: 1, title: '', image: '/img/bg.jpg' },
-    { id: 2, title: '', image: '/img/ee.jpg' },
-    // ...
-  ],
-  savedPosts: [
-    { id: 1, title: 'Kaydedilen Gönderi Başlık 1', image: '/img/m.jpg' },
-    { id: 2, title: 'Kaydedilen Gönderi Başlık 2', image: '/img/m.jpg' },
-    // ...
-  ]
-});
+  const [userInfo, setUserInfo] = useState();
+    axios.get(`${apiURL}/userInfo/esmakoybasi` )
+      .then((response) => {
+        // Kayıt işlemi başarılı
+       const responseData = response.data;
+       setUserInfo(responseData.data)
+
+      })
+      .catch((error) => {
+        console.log('Kayıt olurken bir hata oluştu:', error);
+      });
+
+  
 
 
   const handleFileSelect = () => {
@@ -126,7 +125,7 @@ const UserProfile = () => {
   
 
   const handleFolderNameEdit = (event, postId) => {
-    const updatedSavedPosts = user.savedPosts.map(post => {
+    const updatedSavedPosts = userInfo.savedPosts.map(post => {
       if (post.id === postId) {
         return {
           ...post,
@@ -136,7 +135,7 @@ const UserProfile = () => {
       return post;
     });
 
-    user.savedPosts = updatedSavedPosts;
+    userInfo.savedPosts = updatedSavedPosts;
     setEditedFolderName('');
     setIsEditingFolderName(false);
   };
@@ -144,63 +143,79 @@ const UserProfile = () => {
   return (
     <Layout>
       <CheckAuth />
+
       <UserProfileWrapper>
-        <ProfileImage src={user.avatar} alt="" />
-        <ProfileUsername>{user.username}</ProfileUsername>
-        <ProfileBio>{user.bio}</ProfileBio>
-        <div>
-         <input
-           type="file"
-           accept="image/*"
-           style={{ display: "none" }}
-           ref={fileInputRef}
-           onChange={handleFileSelect}
-         />
-         
-         {imgSrc && (
-           <img
-             src={imgSrc}
-             alt="Selected Image"
-             style={{ width: '200px', marginBottom: '10px', borderRadius: '5%' }}
-           />
-         )}
-         
-          <button onClick={handleFileSelect}>Fotoğraf Seç</button>
-          <button onClick={handleFileUpload}>Yükle</button>
-        </div>
-        <h3>Pinler</h3>
-        <PinsWrapper>
-          {user.pins.map(pin => (
-            <Pin key={pin.id}>
-              <PinImage src={pin.image} alt={pin.title} />
-              <p>{pin.title}</p>
-            </Pin>
-          ))}
-        </PinsWrapper>
-        <h3>Kaydedilen Gönderiler</h3>
-        <SavedPostsWrapper>
-          {user.savedPosts.map(post => (
-            <SavedPost key={post.id} onClick={() => setIsEditingFolderName(post.id)}>
-              {isEditingFolderName === post.id ? (
-                <>
-                  <EditableFolderName
-                    type="text"
-                    value={editedFolderName}
-                    onChange={e => setEditedFolderName(e.target.value)}
-                    onBlur={e => handleFolderNameEdit(e, post.id)}
-                    autoFocus
-                  />
-                </>
-              ) : (
-                <>
-                  <SavedPostImage src={post.image} alt={post.title} />
-                  <p>{post.title}</p>
-                </>
+        {userInfo ? (
+          <>
+            <ProfileImage src={userInfo.avatar} alt="" />
+            <ProfileUsername>{userInfo.username}</ProfileUsername>
+            <ProfileBio>{userInfo.bio}</ProfileBio>
+            <div>
+              <input
+                type="file"
+                accept="image/*"
+                style={{ display: "none" }}
+                ref={fileInputRef}
+                onChange={handleFileSelect}
+              />
+      
+              {imgSrc && (
+                // eslint-disable-next-line jsx-a11y/img-redundant-alt
+                <img
+                  src={imgSrc}
+                  alt="Selected Image"
+                  style={{
+                    width: "200px",
+                    marginBottom: "10px",
+                    borderRadius: "5%",
+                  }}
+                />
               )}
-            </SavedPost>
-          ))}
-        </SavedPostsWrapper>
+      
+              <button onClick={handleFileSelect}>Fotoğraf Seç</button>
+              <button onClick={handleFileUpload}>Yükle</button>
+            </div>
+            <h3>Pinler</h3>
+            <PinsWrapper>
+              {userInfo.pins.map((pin) => (
+                <Pin key={pin.id}>
+                  <PinImage src={pin.image} alt={pin.title} />
+                  <p>{pin.title}</p>
+                </Pin>
+              ))}
+            </PinsWrapper>
+            <h3>Kaydedilen Gönderiler</h3>
+            <SavedPostsWrapper>
+              {userInfo.savedPosts.map((post) => (
+                <SavedPost
+                  key={post.id}
+                  onClick={() => setIsEditingFolderName(post.id)}
+                >
+                  {isEditingFolderName === post.id ? (
+                    <>
+                      <EditableFolderName
+                        type="text"
+                        value={editedFolderName}
+                        onChange={(e) => setEditedFolderName(e.target.value)}
+                        onBlur={(e) => handleFolderNameEdit(e, post.id)}
+                        autoFocus
+                      />
+                    </>
+                  ) : (
+                    <>
+                      <SavedPostImage src={post.image} alt={post.title} />
+                      <p>{post.title}</p>
+                    </>
+                  )}
+                </SavedPost>
+              ))}
+            </SavedPostsWrapper>
+          </>
+        ) : (
+          <p>Veri yok</p>
+        )}
       </UserProfileWrapper>
+      
     </Layout>
   );
 };

@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import validator from 'validator';
 import axios from 'axios';
 import Layout from './layout';
+import { useNavigate } from 'react-router-dom';
+
 
 axios.defaults.withCredentials = true;
 
@@ -10,6 +12,7 @@ export default function UserRegister() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
   const pageStyles = {
     display: 'flex',
@@ -72,6 +75,8 @@ export default function UserRegister() {
       .post(`${apiURL}/userRegister`, { name, email, password })
       .then((response) => {
         // Kayıt işlemi başarılı
+        navigate('/userprofile');
+
       })
       .catch((error) => {
         console.log('Kayıt olurken bir hata oluştu:', error);
