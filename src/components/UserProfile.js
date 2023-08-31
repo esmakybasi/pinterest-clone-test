@@ -108,31 +108,12 @@ const UserProfile = () => {
     const selectedFile = fileInputRef.current.files[0];
     
     if (selectedFile) {
-      try {
-        const formData = new FormData();
+      const formData = new FormData();
         formData.append('file', selectedFile);
   
-        const response = await axios.post('https://seal-app-ajoxg.ondigitalocean.app', formData);
-        console.log(response);
-        if (response.status === 200) {
-          const newPin = {
-            id: user.pins.length + 1,
-            title: '',
-            image: URL.createObjectURL(selectedFile)
-          };
-  
-          const newUser = {
-            ...user,
-            pins: [...user.pins, newPin]
-          };
-  
-          setUser(newUser);
-        } else {
-          console.error('Fotoğraf yükleme başarısız');
-        }
-      } catch (error) {
-        console.error('Fotoğraf yükleme hatası:', error);
-      }
+        const response = await axios.post('http://localhost:3000', formData);
+        console.log("response", response);
+        
     }
   };
   
