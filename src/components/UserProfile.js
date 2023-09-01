@@ -147,7 +147,7 @@ const UserProfile = () => {
       <UserProfileWrapper>
         {userInfo ? (
           <>
-            <ProfileImage src={userInfo.avatar} alt="" />
+            <ProfileImage src={userInfo["avatar"]} alt="" />
             <ProfileUsername>{userInfo.username}</ProfileUsername>
             <ProfileBio>{userInfo.bio}</ProfileBio>
             <div>
